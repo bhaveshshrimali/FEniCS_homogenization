@@ -4,4 +4,4 @@ A collection of homogenization scripts for linear elasticity. See https://comet-
 
 # Some sample cases
 Added are some elementary load cases for a "simple cubic" unit cell with a spherical void placed at the geometric center of the cube. 
-[[https://github.com/bhaveshshrimali/FEniCS_homogenization/blob/master/Images/test_xx_clipped.png]]
+![](/Images/test_xx_clipped.png?raw=true "Axial strain of 0.01")
