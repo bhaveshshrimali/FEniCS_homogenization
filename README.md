@@ -3,5 +3,6 @@ A collection of homogenization scripts for linear elasticity. See https://comet-
 
 
 # Some sample cases
-Added are some elementary load cases for a "simple cubic" unit cell with a spherical void placed at the geometric center of the cube. 
+The above code `3dtest.py` runs elementary load cases (6 of them in 3D) to numerically determine the effective modulus (6 x 6 tensor). See for instance, below, a "simple cubic" unit cell with a spherical void placed at the geometric center of the cube. The corresponding displacement ($u$) is rendered below.  
 ![](/Images/test_xx_clipped.png?raw=true "Axial strain of 0.01")
+
