@@ -1,4 +1,7 @@
+import os 
 from netgen.csg import *
+
+fPath = os.path.join(os.getcwd(),'Meshes','test_mesh.msh')
 
 left = Plane(Pnt(0,0,0),Vec(-1,0,0))
 bottom = Plane(Pnt(0,0,0),Vec(0,-1,0))
@@ -17,4 +20,4 @@ geo.PeriodicSurfaces(back,front)
 
 from ngsolve import * 
 msh = geo.GenerateMesh(maxh=0.05)
-msh.Export('test_mesh.msh','Gmsh2 Format')
+msh.Export(fPath,'Gmsh2 Format')

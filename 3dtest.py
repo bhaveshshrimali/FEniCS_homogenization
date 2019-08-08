@@ -14,9 +14,14 @@ ffc_options = {"optimize": True, \
                "precompute_ip_const": True}
 comm = MPI.comm_world
 cdir = os.getcwd()
+cdir_meshes = os.path.join(cdir,'Meshes')
+cdir_data = os.path.join(cdir,'Data')
+os.makedirs(cdir_data,exist_ok=True)
+cdir_figures = os.path.join(cdir,'Figures')
+os.makedirs(cdir_figures,exist_ok=True)
 # msh_path = os.path.join(cdir,'MeshFile.xml')
 # msh_path = '/projects/meca/bshrima2/FEniCSPlates/3DHomogenizationDolfin/MeshFile.xml'
-msh_path = 'test_mesh.xml'
+msh_path = os.path.join(cdir_meshes,'test_mesh.xml')
 msh = Mesh(msh_path)
 # ************ Try reading mesh in parallel ********************
 # msh = Mesh()
@@ -214,7 +219,7 @@ nu_h = 0.  #.4
 Gamm_bar = Constant(((0, 0, 0), (0, 0, 0), (0, 0, 0)))
 scl = 1.e-2
 L_hom = np.zeros((6,6))
-fname_Ltil = os.path.join(cdir,'Ltil.csv')
+fname_Ltil = os.path.join(cdir_data,'Ltil.csv')
 
 
 Ue = VectorElement('CG',msh.ufl_cell(),deg)
@@ -250,17 +255,17 @@ for j,case in enumerate(['xx','yy','zz','xy','xz','yz']):
     y = SpatialCoordinate(msh)
     sigma_til = np.zeros((6,))
     Eps_til = np.zeros((6,))
-    if case == 'xx':
-        strnvals = assemble(strain2voigt(eps(u_)+Gamm_bar)[0]*dx)/vol_of_solid
-        print(strnvals)
+    # if case == 'xx':
+    #     strnvals = assemble(strain2voigt(eps(u_)+Gamm_bar)[0]*dx)/vol_of_solid
+        # print(strnvals)
     # print(Gamm_bar[0,0].values)
     for k in range(sigma_til.shape[0]):
         sigma_til[k] = float(assemble(stress2Voigt(sigma(u_,Gamm_bar))[k]*dx))/vol_of_solid
         Eps_til[k] = float(assemble(strain2voigt(eps(u_)+Gamm_bar)[k]*dx))/vol_of_solid
     L_hom[j, :] = sigma_til.copy()/scl
 
-    fname_cuv = os.path.join(cdir,'Eps_{}.csv'.format(case))
-    fname_mom = os.path.join(cdir,'Stil_{}.csv'.format(case))
+    fname_cuv = os.path.join(cdir_data,'Eps_{}.csv'.format(case))
+    fname_mom = os.path.join(cdir_data,'Stil_{}.csv'.format(case))
 
     np.savetxt(fname_cuv,Eps_til)
     np.savetxt(fname_mom,sigma_til)
@@ -271,7 +276,7 @@ for j,case in enumerate(['xx','yy','zz','xy','xz','yz']):
     u_plot = Function(Vt)
     u_plot.assign(project(u_full, Vt))
     # # thta_plot.assign(project(thta_full, Vt))
-    xdmf_fname = os.path.join(cdir,'data_vals_{}.xdmf'.format(case))
+    xdmf_fname = os.path.join(cdir_figures,'data_vals_{}.xdmf'.format(case))
     with XDMFFile(comm,xdmf_fname) as res_fil:
         res_fil.parameters["flush_output"] = True
         res_fil.parameters["functions_share_mesh"] = True
